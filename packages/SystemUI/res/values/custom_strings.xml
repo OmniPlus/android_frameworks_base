@@ -123,7 +123,7 @@
 
     <string name="status_bar_notification_hide_icon_packages">Hide app\'s notification icon(s)</string>
 
-    <!-- battery saver mode -->
+
     <string name="battery_saver_start">Battery Saver Enabled</string>
     <string name="battery_saver_stop">Battery Saver Disabled</string>
     <string name="battery_saver_change">Battery Saver Change network to</string>
@@ -145,6 +145,9 @@
     <string name="battery_saver_airplane_ticker">Airplane mode enabled by battery saver</string>
     <string name="battery_saver_airplane_text">Airplane mode enabled by battery saver because there is no signal after 5 minutes</string>
     <string name="battery_saver_disable">Disable</string>
+
+    <string name="app_stop_item_title">Kill app</string>
+
 
     <!-- Dialog title for navigation bar button selection -->
     <string name="navbar_dialog_title">Choose action to assign</string>
