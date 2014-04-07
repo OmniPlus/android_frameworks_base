@@ -33,9 +33,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 
+
 import android.content.pm.PackageInfo;
 
 import android.content.pm.IPackageDataObserver;
+
+
 
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -469,6 +472,13 @@ public abstract class BaseStatusBar extends SystemUI implements
                 null, UserHandle.CURRENT);
     }
 
+    private void launchFloatingWindow(String packageName) {
+        PackageManager pm = mContext.getPackageManager();
+        Intent intent = pm.getLaunchIntentForPackage(packageName);
+        intent.addFlags(Intent.FLAG_FLOATING_WINDOW);
+        mContext.startActivity(intent);
+    }
+
     protected View.OnLongClickListener getNotificationLongClicker() {
         return new View.OnLongClickListener() {
             @Override
@@ -545,8 +555,14 @@ public abstract class BaseStatusBar extends SystemUI implements
                             item.setChecked(!item.isChecked());
                             setIconHiddenByUser(packageNameF, item.isChecked());
                             updateNotificationIcons();
+
                         } else if (item.getItemId() == MENU_HEADS_UP_ID) {
                             mPm.setHeadsUpSetting(packageNameF, !isHeadsUp);
+
+                        } else if (item.getItemId() == R.id.notification_floating_window) {
+                            launchFloatingWindow(packageNameF);
+                            animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+
                         } else {
                             return false;
                         }
