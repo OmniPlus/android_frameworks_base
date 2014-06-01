@@ -519,6 +519,8 @@
   <java-symbol type="string" name="emergency_call_dialog_number_for_display" />
   <java-symbol type="string" name="widget_default_package_name" />
   <java-symbol type="string" name="widget_default_class_name" />
+  <java-symbol type="string" name="config_keyguardPackage" />
+  <java-symbol type="string" name="config_keyguardService" />
   <java-symbol type="string" name="emergency_calls_only" />
   <java-symbol type="string" name="enable_accessibility_canceled" />
   <java-symbol type="string" name="eventTypeAnniversary" />
@@ -1792,6 +1794,7 @@
   <java-symbol type="dimen" name="subtitle_shadow_offset" />
   <java-symbol type="dimen" name="subtitle_outline_width" />
 
+<<<<<<< HEAD
   <!-- CM -->
   <java-symbol type="bool" name="config_samsung_stk" />
   <java-symbol type="drawable" name="ic_lock_reboot" />
@@ -1889,5 +1892,9 @@
   <java-symbol type="string" name="symbol_picker_Y" />
   <java-symbol type="string" name="symbol_picker_z" />
   <java-symbol type="string" name="symbol_picker_Z" />
+
+  <!-- Config.xml entries -->
+  <java-symbol type="integer" name="config_wallpaperMaxWidth" />
+
 
 </resources>
