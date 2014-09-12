@@ -282,6 +282,4 @@ interface IWindowManager
      * @param enabled Whether touch exploration is enabled.
      */
     void setTouchExplorationEnabled(boolean enabled);
-
-    Bitmap getScreenshotFromApplications(IBinder appToken);
 }

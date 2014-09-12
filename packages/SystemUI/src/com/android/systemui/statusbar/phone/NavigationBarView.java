@@ -426,7 +426,6 @@ public class NavigationBarView extends LinearLayout {
         }
 
         setDisabledFlags(mDisabledFlags, true);
-        mBarTransitions.resetColorBackground(backAlt);
     }
 
     public void setDisabledFlags(int disabledFlags) {
