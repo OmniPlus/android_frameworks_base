@@ -312,6 +312,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     private Runnable mStatusHeaderUpdater;
     private ImageView mStatusHeaderImage;
     private Drawable mHeaderOverlay;
+    private ImageView mCarrierLogo;
+    private boolean mCarrierLogoEnabled = false;
 
     // for disabling the status bar
     int mDisabled = 0;
@@ -363,6 +365,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_SHOW), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+
                     Settings.System.HEADS_UP_EXPANDED), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -373,6 +376,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_SHOW_UPDATE), false, this,
+
+                    Settings.System.STATUS_BAR_CARRIER_LOGO), false, this,
+
                     UserHandle.USER_ALL);
             update();
         }
@@ -428,6 +434,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                     updateNavigationBar();
                 }
             }
+
+            mCarrierLogoEnabled = Settings.System.getIntForUser(
+                    resolver, Settings.System.STATUS_BAR_CARRIER_LOGO, 0
+                    , UserHandle.USER_CURRENT) == 1;
+            setCarrierVisibility();
             updateCustomHeaderStatus();
 
         }
@@ -696,6 +707,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         mClock = (Clock) mStatusBarView.findViewById(R.id.clock);
         mClockCenter = (ClockCenter)mStatusBarView.findViewById(R.id.center_clock);
         mNotificationIcons = (IconMerger)mStatusBarView.findViewById(R.id.notificationIcons);
+        mCarrierLogo = (ImageView) mStatusBarView.findViewById(R.id.carrierLogo);
         mMoreIcon = mStatusBarView.findViewById(R.id.moreIcon);
         mNotificationIcons.setOverflowIndicator(mMoreIcon);
         mNotificationIcons.setClockCenter(mClockCenter);
@@ -796,7 +808,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
 
         mNetworkController.addSignalCluster(signalCluster);
+        mNetworkController.addCarrierCluster(signalCluster);
         signalCluster.setNetworkController(mNetworkController);
+        signalCluster.setStatusBar(this);
 
         final boolean isAPhone = mNetworkController.hasVoiceCallingFeature();
         if (isAPhone) {
@@ -3207,6 +3221,22 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             }
         }
     };
+
+    private void setCarrierVisibility() {
+        if (mCarrierLogo != null) {
+            mCarrierLogo.setVisibility(mCarrierLogoEnabled ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    public void setCarrierVisibility(int vis) {
+        if (mCarrierLogoEnabled) {
+            mCarrierLogo.setVisibility(vis);
+        }
+    }
+
+    public void setCarrierImageResource(int res) {
+        mCarrierLogo.setImageResource(res);
+    }
 
     // SystemUIService notifies SystemBars of configuration changes, which then calls down here
     @Override
