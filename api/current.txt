@@ -2750,6 +2750,7 @@ package android.app {
     method public void finishActivity(int);
     method public void finishActivityFromChild(android.app.Activity, int);
     method public void finishAffinity();
+    method public void finishFloating();
     method public void finishFromChild(android.app.Activity);
     method public android.app.ActionBar getActionBar();
     method public final android.app.Application getApplication();
@@ -4284,6 +4285,7 @@ package android.app {
     method public android.content.Intent[] getIntents();
     method public android.app.PendingIntent getPendingIntent(int, int);
     method public android.app.PendingIntent getPendingIntent(int, int, android.os.Bundle);
+    method public void setTaskOnHome(boolean);
     method public void startActivities();
     method public void startActivities(android.os.Bundle);
   }
@@ -28654,6 +28656,7 @@ package android.view {
     field public static final int PROGRESS_START = 0; // 0x0
     field public static final int PROGRESS_VISIBILITY_OFF = -2; // 0xfffffffe
     field public static final int PROGRESS_VISIBILITY_ON = -1; // 0xffffffff
+    field public boolean mIsFloatingWindow;
   }
 
   public static abstract interface Window.Callback {
