@@ -376,11 +376,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_SHOW_UPDATE), false, this,
-
+		    UserHandle.USER_ALL);
+	    resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CARRIER_LOGO), false, this,
-
                     UserHandle.USER_ALL);
-            update();
+            
+
+		update();
         }
 
         @Override
