@@ -75,7 +75,6 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -177,20 +176,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected IDreamManager mDreamManager;
     PowerManager mPowerManager;
     protected int mRowHeight;
-
     private PackageManager mPm;
-
-
-    // Notification helper
-    protected NotificationHelper mNotificationHelper;
-
-    // Peek
-    protected Peek mPeek;
-
-    protected FrameLayout mStatusBarContainer;
-
-    // UI-specific methods
-
 
     /**
      * Create all windows necessary for the status bar (including navigation, overlay panels, etc)
@@ -331,15 +317,6 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         mLocale = mContext.getResources().getConfiguration().locale;
         mLayoutDirection = TextUtils.getLayoutDirectionFromLocale(mLocale);
-
-
-        mPeek = new Peek(this, mContext);
-        mNotificationHelper = new NotificationHelper(this, mContext);
-
-        mPeek.setNotificationHelper(mNotificationHelper);
-
-        mStatusBarContainer = new FrameLayout(mContext);
-
 
         // Connect in to the status bar manager service
         StatusBarIconList iconList = new StatusBarIconList();
