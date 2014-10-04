@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * This code has been modified. Portions copyright (C) 2013, ParanoidAndroid Project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +48,6 @@ import com.android.server.power.ShutdownThread;
 
 import android.Manifest;
 import android.app.ActivityManager.StackBoxInfo;
-import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
 import android.app.StatusBarManager;
@@ -153,7 +153,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.List;
 
 /** {@hide} */
@@ -297,8 +296,7 @@ public class WindowManagerService extends IWindowManager.Stub
     final private KeyguardDisableHandler mKeyguardDisableHandler;
 
     private final boolean mHeadless;
-
-
+    
     private final int mSfHwRotation;
 
     private BroadcastReceiver mThemeChangeReceiver = new BroadcastReceiver() {
@@ -306,7 +304,6 @@ public class WindowManagerService extends IWindowManager.Stub
             mUiContext = null;
         }
     };
-
 
     final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -451,15 +448,8 @@ public class WindowManagerService extends IWindowManager.Stub
     int mRotation = 0;
     int mForcedAppOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     boolean mAltOrientation = false;
-    class RotationWatcher {
-        IRotationWatcher watcher;
-        IBinder.DeathRecipient dr;
-        RotationWatcher(IRotationWatcher w, IBinder.DeathRecipient d) {
-            watcher = w;
-            dr = d;
-        }
-    }
-    ArrayList<RotationWatcher> mRotationWatchers = new ArrayList<RotationWatcher>();
+    ArrayList<IRotationWatcher> mRotationWatchers
+            = new ArrayList<IRotationWatcher>();
     int mDeferredRotationPauseCount;
 
     int mSystemDecorLayer = 0;
@@ -561,9 +551,9 @@ public class WindowManagerService extends IWindowManager.Stub
 
     PowerManagerService mPowerManager;
 
-    float mWindowAnimationScale = 0.25f;
-    float mTransitionAnimationScale = 0.25f;
-    float mAnimatorDurationScale = 0.25f;
+    float mWindowAnimationScale = 1.0f;
+    float mTransitionAnimationScale = 1.0f;
+    float mAnimatorDurationScale = 1.0f;
 
     final InputManagerService mInputManager;
     final DisplayManagerService mDisplayManagerService;
@@ -828,8 +818,7 @@ public class WindowManagerService extends IWindowManager.Stub
             SurfaceControl.closeTransaction();
         }
 
-
-        // Load hardware rotation from prop
+	// Load hardware rotation from prop
         mSfHwRotation = android.os.SystemProperties.getInt("ro.sf.hwrotation",0) / 90;
 
         ThemeUtils.registerThemeChangeReceiver(mContext, mThemeChangeReceiver);
@@ -840,16 +829,11 @@ public class WindowManagerService extends IWindowManager.Stub
             mUiContext = ThemeUtils.createUiContext(mContext);
         }
         return mUiContext != null ? mUiContext : mContext;
-
     }
 
     public InputMonitor getInputMonitor() {
         return mInputMonitor;
     }
-
-    private Context getUiContext() {
-       return mContext;
-   }
 
     @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags)
@@ -2493,11 +2477,6 @@ public class WindowManagerService extends IWindowManager.Stub
     }
 
     public void removeWindowLocked(Session session, WindowState win) {
-        removeWindowLocked(session, win, false);
-    }
-
-    private void removeWindowLocked(Session session, WindowState win,
-            boolean forceRemove) {
         if (win.mAttrs.type == TYPE_APPLICATION_STARTING) {
             if (DEBUG_STARTING_WINDOW) Slog.d(TAG, "Starting window removed " + win);
             removeStartingWindowTimeout(win.mAppToken);
@@ -2548,7 +2527,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     mDisplayMagnifier.onWindowTransitionLocked(win, transit);
                 }
             }
-            if (!forceRemove && (win.mExiting || win.mWinAnimator.isAnimating())) {
+            if (win.mExiting || win.mWinAnimator.isAnimating()) {
                 // The exit animation is running... wait for it!
                 //Slog.i(TAG, "*** Running exit animation...");
                 win.mExiting = true;
@@ -3334,6 +3313,7 @@ public class WindowManagerService extends IWindowManager.Stub
         // is running.
         if (okToDisplay()) {
             DisplayInfo displayInfo = getDefaultDisplayInfoLocked();
+
             final int width;
             final int height;
             if (mPolicy.isImmersiveMode(mLastStatusBarVisibility)) {
@@ -3343,6 +3323,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 width = displayInfo.appWidth;
                 height = displayInfo.appHeight;
             }
+            
             if (DEBUG_APP_TRANSITIONS || DEBUG_ANIM) Slog.v(TAG, "applyAnimation: atoken="
                     + atoken);
             Animation a = mAppTransition.loadAnimation(lp, transit, enter, width, height);
@@ -3633,9 +3614,8 @@ public class WindowManagerService extends IWindowManager.Stub
             Task newTask = mTaskIdToTask.get(groupId);
             if (newTask == null) {
                 newTask = createTask(groupId, oldTask.mStack.mStackId, oldTask.mUserId, atoken);
-            } else {
-                newTask.mAppTokens.add(atoken);
             }
+            newTask.mAppTokens.add(atoken);
         }
     }
 
@@ -4462,6 +4442,7 @@ public class WindowManagerService extends IWindowManager.Stub
             // If we are preparing an app transition, then delay changing
             // the visibility of this token until we execute that transition.
             if (okToDisplay() && mAppTransition.isTransitionSet()) {
+
                 // Already in requested state, don't do anything more.
                 if (wtoken.hiddenRequested != visible) {
                     return;
@@ -5343,17 +5324,16 @@ public class WindowManagerService extends IWindowManager.Stub
         ShutdownThread.rebootSafeMode(getUiContext(), confirm);
     }
 
+    // Called by window manager policy.  Not exposed externally.
     @Override
-
-    public void reboot(String reason, boolean confirm) {
-        ShutdownThread.reboot(mContext, reason, confirm);
+    public void reboot(boolean confirm) {
+        reboot(null, confirm);
     }
-
 
     // Called by window manager policy.  Not exposed externally.
     @Override
-    public void rebootTile() {
-        ShutdownThread.reboot(getUiContext(), null, true);
+    public void reboot(String reason, boolean confirm) {
+        ShutdownThread.reboot(mContext, reason, confirm);
     }
 
 
@@ -5367,12 +5347,6 @@ public class WindowManagerService extends IWindowManager.Stub
     @Override
     public void setTouchExplorationEnabled(boolean enabled) {
         mPolicy.setTouchExplorationEnabled(enabled);
-    }
-
-    // Called by window manager policy.  Not exposed externally.
-    @Override
-    public void reboot() {
-        ShutdownThread.reboot(getUiContext(), null, true);
     }
 
     public void setCurrentUser(final int newUserId) {
@@ -5801,7 +5775,6 @@ public class WindowManagerService extends IWindowManager.Stub
                             ws.isDisplayedLw()) {
                         screenshotReady = true;
                     }
-
                 }
 
                 if (appToken != null && appWin == null) {
@@ -5829,8 +5802,9 @@ public class WindowManagerService extends IWindowManager.Stub
 
                 // The screenshot API does not apply the current screen rotation.
                 rot = getDefaultDisplayContentLocked().getDisplay().getRotation();
-                // Allow for abnormal hardware orientation
-                rot = (rot + mSfHwRotation) % 4;
+ 
+                 // Allow for abnormal hardware orientation
+                 rot = (rot + mSfHwRotation) % 4;
 
                 int fw = frame.width();
                 int fh = frame.height();
@@ -6171,7 +6145,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
         for (int i=mRotationWatchers.size()-1; i>=0; i--) {
             try {
-                mRotationWatchers.get(i).watcher.onRotationChanged(rotation);
+                mRotationWatchers.get(i).onRotationChanged(rotation);
             } catch (RemoteException e) {
             }
         }
@@ -6203,10 +6177,10 @@ public class WindowManagerService extends IWindowManager.Stub
             public void binderDied() {
                 synchronized (mWindowMap) {
                     for (int i=0; i<mRotationWatchers.size(); i++) {
-                        if (watcherBinder == mRotationWatchers.get(i).watcher.asBinder()) {
-                            RotationWatcher removed = mRotationWatchers.remove(i);
+                        if (watcherBinder == mRotationWatchers.get(i).asBinder()) {
+                            IRotationWatcher removed = mRotationWatchers.remove(i);
                             if (removed != null) {
-                                removed.watcher.asBinder().unlinkToDeath(this, 0);
+                                removed.asBinder().unlinkToDeath(this, 0);
                             }
                             i--;
                         }
@@ -6218,7 +6192,7 @@ public class WindowManagerService extends IWindowManager.Stub
         synchronized (mWindowMap) {
             try {
                 watcher.asBinder().linkToDeath(dr, 0);
-                mRotationWatchers.add(new RotationWatcher(watcher, dr));
+                mRotationWatchers.add(watcher);
             } catch (RemoteException e) {
                 // Client died, no cleanup needed.
             }
@@ -6232,13 +6206,9 @@ public class WindowManagerService extends IWindowManager.Stub
         final IBinder watcherBinder = watcher.asBinder();
         synchronized (mWindowMap) {
             for (int i=0; i<mRotationWatchers.size(); i++) {
-                RotationWatcher rotationWatcher = mRotationWatchers.get(i);
-                if (watcherBinder == rotationWatcher.watcher.asBinder()) {
-                    RotationWatcher removed = mRotationWatchers.remove(i);
-                    if (removed != null) {
-                        removed.watcher.asBinder().unlinkToDeath(removed.dr, 0);
-                        i--;
-                    }
+                if (watcherBinder == mRotationWatchers.get(i).asBinder()) {
+                    mRotationWatchers.remove(i);
+                    i--;
                 }
             }
         }
@@ -8810,6 +8780,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     drawSurface.release();
                     appAnimator.thumbnailLayer = topOpeningLayer;
                     DisplayInfo displayInfo = getDefaultDisplayInfoLocked();
+
                     final int width;
                     final int height;
                     if (mPolicy.isImmersiveMode(mLastStatusBarVisibility)) {
@@ -8819,8 +8790,9 @@ public class WindowManagerService extends IWindowManager.Stub
                         width = displayInfo.appWidth;
                         height = displayInfo.appHeight;
                     }
+
                     Animation anim = mAppTransition.createThumbnailAnimationLocked(
-                            transit, true, true, width, height);
+                    transit, true, true, width, height);
                     appAnimator.thumbnailAnimation = anim;
                     anim.restrictDuration(MAX_ANIMATION_DURATION);
                     anim.scaleCurrentDuration(mTransitionAnimationScale);
@@ -10061,15 +10033,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
             if (DEBUG_FOCUS_LIGHT) Slog.v(TAG, "findFocusedWindow: Found new focus @ " + i +
                         " = " + win);
-
-            // Dispatch to this window if it is wants key events.
-            if (win.canReceiveKeys()) {
-                if (mFocusedApp != null) {
-                    return win;
-                } else {
-                    return win;
-                }
-            }
+            return win;
         }
 
         if (DEBUG_FOCUS_LIGHT) Slog.v(TAG, "findFocusedWindow: No focusable windows.");
@@ -11039,7 +11003,7 @@ public class WindowManagerService extends IWindowManager.Stub
             WindowList windows = displayContent.getWindowList();
             while (!windows.isEmpty()) {
                 final WindowState win = windows.get(windows.size() - 1);
-                removeWindowLocked(win.mSession, win, true);
+                removeWindowLocked(win.mSession, win);
             }
         }
         mAnimator.removeDisplayLocked(displayId);
@@ -11065,119 +11029,5 @@ public class WindowManagerService extends IWindowManager.Stub
     @Override
     public void addSystemUIVisibilityFlag(int flag) {
         mLastStatusBarVisibility |= flag;
-    }
-
-    private void moveTaskAndActivityToFront(int taskId) {
-        try {
-            moveTaskToTop(taskId);
-            mActivityManager.moveTaskToFront(taskId, 0, null);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Cannot move the activity to front", e);
-        }
-    }
-
-    public void notifyFloatActivityTouched(IBinder token, boolean force) {
-        synchronized(mWindowMap) {
-              boolean changed = false;
-              if (token != null) {
-                  AppWindowToken newFocus = findAppWindowToken(token);
-                  if (newFocus == null) {
-                      Slog.w(TAG, "Attempted to set focus to non-existing app token: " + token);
-                      return;
-                  }
-                  changed = mFocusedApp != newFocus;
-                  mFocusedApp = newFocus;
-                  if (changed || force) {
-                      if (DEBUG_FOCUS) Slog.v(TAG, "Changed app focus to " + token);
-                      mInputMonitor.setFocusedAppLw(newFocus);
-                  }
-              }
-
-              if (changed || force) {
-                  final long origId = Binder.clearCallingIdentity();
-                  updateFocusedWindowLocked(UPDATE_FOCUS_NORMAL, true);
-                  mH.removeMessages(H.REPORT_FOCUS_CHANGE);
-                  mH.sendEmptyMessage(H.REPORT_FOCUS_CHANGE);
-                  Binder.restoreCallingIdentity(origId);
-              }
-       }
-
-       if (!force) {
-           final long origId = Binder.clearCallingIdentity();
-           try {
-                int taskId = mActivityManager.getTaskForActivity(token, false);
-                moveTaskAndActivityToFront(taskId);
-           } catch (RemoteException e) {
-                Log.e(TAG, "Cannot move the activity to front", e);
-           }
-           Binder.restoreCallingIdentity(origId);
-       }
-    }
-
-    public Rect getAppFullscreenViewRect() {
-        final DisplayContent displayContent = getDefaultDisplayContentLocked();
-        final boolean rotated = (mRotation == Surface.ROTATION_90
-                || mRotation == Surface.ROTATION_270);
-        final int realdw = rotated ?
-                displayContent.mBaseDisplayHeight : displayContent.mBaseDisplayWidth;
-        final int realdh = rotated ?
-                displayContent.mBaseDisplayWidth : displayContent.mBaseDisplayHeight;
-        final boolean nativeLandscape =
-                (displayContent.mBaseDisplayHeight < displayContent.mBaseDisplayWidth);
-
-        int dw = realdw;
-        int dh = realdh;
-
-        // Get application display metrics.
-        int appWidth = mPolicy.getNonDecorDisplayWidth(dw, dh, mRotation);
-        int appHeight = mPolicy.getNonDecorDisplayHeight(dw, dh, mRotation);
-
-        return new Rect(0, 0, appWidth, appHeight);
-    }
-
-    public Rect getAppMinimumViewRect() {
-        final DisplayContent displayContent = getDefaultDisplayContentLocked();
-        final boolean rotated = (mRotation == Surface.ROTATION_90
-                || mRotation == Surface.ROTATION_270);
-        final int realdw = rotated ?
-                displayContent.mBaseDisplayHeight : displayContent.mBaseDisplayWidth;
-        final int realdh = rotated ?
-                displayContent.mBaseDisplayWidth : displayContent.mBaseDisplayHeight;
-        final boolean nativeLandscape =
-                (displayContent.mBaseDisplayHeight < displayContent.mBaseDisplayWidth);
-
-        int dw = realdw;
-        int dh = realdh;
-
-        // Get application display metrics.
-        int appWidth = mPolicy.getNonDecorDisplayWidth(dw, dh, mRotation);
-        int appHeight = mPolicy.getNonDecorDisplayHeight(dw, dh, mRotation);
-
-        return new Rect(0, 0, (int)(appWidth * 0.5f) , (int)(appHeight * 0.5f));
-    }
-
-    public Rect getFloatViewRect() {
-        final DisplayContent displayContent = getDefaultDisplayContentLocked();
-        final boolean rotated = (mRotation == Surface.ROTATION_90
-                || mRotation == Surface.ROTATION_270);
-        final int realdw = rotated ?
-                displayContent.mBaseDisplayHeight : displayContent.mBaseDisplayWidth;
-        final int realdh = rotated ?
-                displayContent.mBaseDisplayWidth : displayContent.mBaseDisplayHeight;
-        final boolean nativeLandscape =
-                (displayContent.mBaseDisplayHeight < displayContent.mBaseDisplayWidth);
-
-        int dw = realdw;
-        int dh = realdh;
-
-        // Get application display metrics.
-        int appWidth = mPolicy.getNonDecorDisplayWidth(dw, dh, mRotation);
-        int appHeight = mPolicy.getNonDecorDisplayHeight(dw, dh, mRotation);
-
-        if (nativeLandscape ^ rotated) {
-            return new Rect(0, 0, (int)(appWidth * 0.7f), (int)(appHeight * 0.9f));
-        } else {
-            return new Rect(0, 0, (int)(appWidth * 0.9f) , (int)(appHeight * 0.7f));
-        }
     }
 }
