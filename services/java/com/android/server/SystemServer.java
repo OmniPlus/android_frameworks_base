@@ -380,7 +380,7 @@ class ServerThread {
         PrintManagerService printManager = null;
         MediaRouterService mediaRouter = null;
 
-        EdgeGestureService edgeGestureService = null;
+       // EdgeGestureService edgeGestureService = null;
         ThemeService themeService = null;
 
 
