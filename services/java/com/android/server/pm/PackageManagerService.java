@@ -10242,13 +10242,14 @@ public class PackageManagerService extends IPackageManager.Stub {
                 // they have set the special DELETE_SYSTEM_APP which requests different
                 // semantics than normal for uninstalling system apps.
                 if (DEBUG_REMOVE) Slog.d(TAG, "Only deleting for single user");
-               /* ps.setUserState(user.getIdentifier(),
-                        COMPONENT_ENABLED_STATE_DEFAULT,
-                        false, //installed
-                        true,  //stopped
-                        true,  //notLaunched
-                        false, //blocked
-                        null, null, null); */
+                ps.setUserState(user.getIdentifier(),
+                         COMPONENT_ENABLED_STATE_DEFAULT,
+                         false, //installed
+                         true,  //stopped
+                         true,  //notLaunched
+                         false, //heads up
+                         false, //blocked
+                         null, null, null);
                 if (!isSystemApp(ps)) {
                     if (ps.isAnyInstalled(sUserManager.getUserIds())) {
                         // Other user still have this package installed, so all
@@ -10885,6 +10886,57 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     @Override
+
+    public void setHeadsUpSetting(String appPackageName,
+            boolean enabled, int userId) {
+       if (!sUserManager.exists(userId)) return;
+        setHeadsUp(appPackageName, enabled, userId);
+    }
+
+    @Override
+    public boolean getHeadsUpSetting(String packageName, int userId) {
+        if (!sUserManager.exists(userId)) return false;
+        int uid = Binder.getCallingUid();
+        enforceCrossUserPermission(uid, userId, false, "get heads up setting");
+       // reader
+        synchronized (mPackages) {
+            return mSettings.getHeadsUpSettingLPr(packageName, userId);
+        }
+    }
+
+    private void setHeadsUp(final String packageName,
+            final boolean enabled, final int userId) {
+        PackageSetting pkgSetting;
+        final int uid = Binder.getCallingUid();
+        final int permission = mContext.checkCallingPermission(
+                android.Manifest.permission.CHANGE_HEADS_UP_STATE);
+        final boolean allowedByPermission = (permission == PackageManager.PERMISSION_GRANTED);
+        enforceCrossUserPermission(uid, userId, false, "set heads up setting");
+
+        synchronized (mPackages) {
+            pkgSetting = mSettings.mPackages.get(packageName);
+            if (pkgSetting == null) {
+                throw new IllegalArgumentException(
+                        "Unknown package: " + packageName);
+            }
+            // Allow root and verify that userId is not being specified by a different user
+            if (!allowedByPermission && !UserHandle.isSameApp(uid, pkgSetting.appId)) {
+                throw new SecurityException(
+                        "Permission Denial: attempt to change heads up state from pid="
+                       + Binder.getCallingPid()
+                        + ", uid=" + uid + ", package uid=" + pkgSetting.appId);
+           }
+            if (pkgSetting.isHeadsUp(userId) == enabled) {
+               // Nothing to do
+                return;
+            }
+            pkgSetting.setHeadsUp(enabled, userId);
+            mSettings.writePackageRestrictionsLPr(userId);
+        }
+    }
+
+    @Override
+
     public void setApplicationEnabledSetting(String appPackageName,
             int newState, int flags, int userId, String callingPackage) {
         if (!sUserManager.exists(userId)) return;
