@@ -5341,7 +5341,7 @@ public class WindowManagerService extends IWindowManager.Stub
         ShutdownThread.rebootSafeMode(getUiContext(), confirm);
     }
 
-    @Override
+    // @Override
 
     public void reboot(String reason, boolean confirm) {
         ShutdownThread.reboot(mContext, reason, confirm);
@@ -5349,7 +5349,8 @@ public class WindowManagerService extends IWindowManager.Stub
 
 
     // Called by window manager policy.  Not exposed externally.
-    @Override
+
+    // @Override
     public void rebootTile() {
         ShutdownThread.reboot(getUiContext(), null, true);
     }
