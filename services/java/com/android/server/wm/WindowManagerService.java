@@ -11154,7 +11154,7 @@ public class WindowManagerService extends IWindowManager.Stub
         int appHeight = mPolicy.getNonDecorDisplayHeight(dw, dh, mRotation);
 
         return new Rect(0, 0, (int)(appWidth * 0.5f) , (int)(appHeight * 0.5f));
-    }
+    } 
 
     public Rect getFloatViewRect() {
         final DisplayContent displayContent = getDefaultDisplayContentLocked();
