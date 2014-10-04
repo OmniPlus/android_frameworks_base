@@ -10242,7 +10242,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                 // they have set the special DELETE_SYSTEM_APP which requests different
                 // semantics than normal for uninstalling system apps.
                 if (DEBUG_REMOVE) Slog.d(TAG, "Only deleting for single user");
-                ps.setUserState(user.getIdentifier(),
+                // ps.setUserState(user.getIdentifier(),
                         COMPONENT_ENABLED_STATE_DEFAULT,
                         false, //installed
                         true,  //stopped
@@ -11489,9 +11489,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                 mSettings.mKeySetManager.dump(pw, packageName, dumpState);
             }
 
-            if (dumpState.isDumping(DumpState.DUMP_PACKAGES)) {
+           /* if (dumpState.isDumping(DumpState.DUMP_PACKAGES)) {
                 mSettings.dumpPackagesLPr(pw, packageName, dumpState);
-            }
+            } */
 
             if (dumpState.isDumping(DumpState.DUMP_SHARED_USERS)) {
                 mSettings.dumpSharedUsersLPr(pw, packageName, dumpState);

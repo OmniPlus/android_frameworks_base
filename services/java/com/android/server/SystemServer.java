@@ -951,13 +951,13 @@ class ServerThread {
         }
 
 
-        if (edgeGestureService != null) {
+       /* if (edgeGestureService != null) {
             try {
                 edgeGestureService.systemReady();
             } catch (Throwable e) {
                 reportWtf("making EdgeGesture service ready", e);
             }
-        }
+        } */
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_APP_LAUNCH_FAILURE);
