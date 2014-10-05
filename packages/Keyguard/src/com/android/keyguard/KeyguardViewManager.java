@@ -425,7 +425,7 @@ public class KeyguardViewManager {
 
             }
         
-
+}
         public void setCustomBackground(Drawable d) {
 
             if (!ActivityManager.isHighEndGfx() || !mScreenOn) {
@@ -478,7 +478,7 @@ public class KeyguardViewManager {
             }
             invalidate();
 
-        }
+        
 
         private void computeCustomBackgroundBounds(Drawable background) {
             if (background == null) return; // Nothing to do
