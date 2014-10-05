@@ -422,7 +422,7 @@ public class KeyguardViewManager {
                 canvas.drawColor(BACKGROUND_COLOR, PorterDuff.Mode.SRC);
 
             }
-        };
+        }
 
         public void setCustomBackground(Drawable d) {
 
@@ -476,7 +476,7 @@ public class KeyguardViewManager {
             }
             invalidate();
 
-        };
+        }
 
         private void computeCustomBackgroundBounds(Drawable background) {
             if (background == null) return; // Nothing to do
@@ -500,13 +500,13 @@ public class KeyguardViewManager {
             } else {
                 background.setBounds(0, 0, vWidth, (int) (vWidth / bgAspect));
             }
-        };
+        }
 
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
             computeCustomBackgroundBounds(mCustomBackground);
-        };
+        }
 
         @Override
         protected void onConfigurationChanged(Configuration newConfig) {
@@ -517,7 +517,7 @@ public class KeyguardViewManager {
             } else {
                 if (DEBUG) Log.v(TAG, "onConfigurationChanged: view not visible");
             }
-        };
+        }
 
         @Override
         public boolean dispatchKeyEvent(KeyEvent event) {
@@ -537,7 +537,7 @@ public class KeyguardViewManager {
                 }
             }
             return super.dispatchKeyEvent(event);
-        };
+        }
 
         private void cacheUserImage() {
             WallpaperManager wm = WallpaperManager.getInstance(mContext);
@@ -548,7 +548,7 @@ public class KeyguardViewManager {
                 mUserBackground = null;
             }
             setCustomBackground(null);
-        };
+        }
 
         public boolean shouldShowWallpaper(boolean hiding) {
             if (hiding) {
@@ -562,11 +562,11 @@ public class KeyguardViewManager {
                 }
             }
             return shouldShowWallpaper();
-        };
+        }
 
         public boolean shouldShowWallpaper() {
             return mUserBackground == null;
-        };
+        }
 
     }
 
