@@ -556,9 +556,9 @@ public class NavigationBarView extends LinearLayout {
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_MENU_BIG, !disableRecent);
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_SEARCH, !disableRecent);
 
-        getBackButton().setVisibility(disableBack ? View.INVISIBLE : View.VISIBLE);
+       /* getBackButton().setVisibility(disableBack ? View.INVISIBLE : View.VISIBLE);
         getHomeButton().setVisibility(disableHome ? View.INVISIBLE : View.VISIBLE);
-        getRecentsButton().setVisibility(disableRecent ? View.INVISIBLE : View.VISIBLE);
+        getRecentsButton().setVisibility(disableRecent ? View.INVISIBLE : View.VISIBLE); */
 
 
         final boolean showSearch = disableHome && !disableSearch;

@@ -181,8 +181,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     private PackageManager mPm;
 
 
-    // Notification helper
-    protected NotificationHelper mNotificationHelper;
+
 
     protected FrameLayout mStatusBarContainer;
 
@@ -331,7 +330,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
 
 
-        mNotificationHelper = new NotificationHelper(this, mContext);
+        //mNotificationHelper = new NotificationHelper(this, mContext);
 
         
 
