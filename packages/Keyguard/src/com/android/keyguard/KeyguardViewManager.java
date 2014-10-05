@@ -478,7 +478,7 @@ public class KeyguardViewManager {
             }
             invalidate();
 
-        
+        }
 
         private void computeCustomBackgroundBounds(Drawable background) {
             if (background == null) return; // Nothing to do
@@ -502,14 +502,14 @@ public class KeyguardViewManager {
             } else {
                 background.setBounds(0, 0, vWidth, (int) (vWidth / bgAspect));
             }
-        }
-
+        
+}
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
             computeCustomBackgroundBounds(mCustomBackground);
-        }
-
+        
+}
         @Override
         protected void onConfigurationChanged(Configuration newConfig) {
             super.onConfigurationChanged(newConfig);
@@ -520,7 +520,7 @@ public class KeyguardViewManager {
                 if (DEBUG) Log.v(TAG, "onConfigurationChanged: view not visible");
             }
         }
-
+}
         @Override
         public boolean dispatchKeyEvent(KeyEvent event) {
             if (mKeyguardView != null) {
@@ -550,8 +550,8 @@ public class KeyguardViewManager {
                 mUserBackground = null;
             }
             setCustomBackground(null);
-        }
-
+        
+}
         public boolean shouldShowWallpaper(boolean hiding) {
             if (hiding) {
                 if (mCustomBackground != null) {
@@ -564,13 +564,13 @@ public class KeyguardViewManager {
                 }
             }
             return shouldShowWallpaper();
-        }
-
+        
+}
         public boolean shouldShowWallpaper() {
             return mUserBackground == null;
         }
 
-    }
+    
 
     SparseArray<Parcelable> mStateContainer = new SparseArray<Parcelable>();
     private void maybeCreateKeyguardLocked(boolean enableScreenRotation, boolean force,
