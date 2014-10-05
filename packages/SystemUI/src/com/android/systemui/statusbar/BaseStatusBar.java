@@ -184,9 +184,6 @@ public abstract class BaseStatusBar extends SystemUI implements
     // Notification helper
     protected NotificationHelper mNotificationHelper;
 
-    // Peek
-    protected Peek mPeek;
-
     protected FrameLayout mStatusBarContainer;
 
     // UI-specific methods
@@ -333,10 +330,10 @@ public abstract class BaseStatusBar extends SystemUI implements
         mLayoutDirection = TextUtils.getLayoutDirectionFromLocale(mLocale);
 
 
-        mPeek = new Peek(this, mContext);
+
         mNotificationHelper = new NotificationHelper(this, mContext);
 
-        mPeek.setNotificationHelper(mNotificationHelper);
+        
 
         mStatusBarContainer = new FrameLayout(mContext);
 
