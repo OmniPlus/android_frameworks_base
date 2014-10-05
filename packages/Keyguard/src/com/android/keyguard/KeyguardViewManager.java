@@ -407,6 +407,8 @@ public class KeyguardViewManager {
                     android.Manifest.permission.CONTROL_KEYGUARD, null);
         }
 
+   }
+
         public void drawToCanvas(Canvas canvas, Drawable drawable) {
             if (drawable != null) {
                 final Rect bounds = drawable.getBounds();
@@ -422,7 +424,7 @@ public class KeyguardViewManager {
                 canvas.drawColor(BACKGROUND_COLOR, PorterDuff.Mode.SRC);
 
             }
-        }
+        
 
         public void setCustomBackground(Drawable d) {
 
