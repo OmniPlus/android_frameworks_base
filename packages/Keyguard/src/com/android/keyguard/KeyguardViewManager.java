@@ -521,7 +521,7 @@ public class KeyguardViewManager {
             }
         }
 }
-        @Override
+        //@Override
         public boolean dispatchKeyEvent(KeyEvent event) {
             if (mKeyguardView != null) {
                 // Always process back and menu keys, regardless of focus
