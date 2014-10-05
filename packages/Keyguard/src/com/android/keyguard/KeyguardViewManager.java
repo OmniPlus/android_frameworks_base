@@ -405,7 +405,7 @@ public class KeyguardViewManager {
                 }
             }, new IntentFilter(Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED),
                     android.Manifest.permission.CONTROL_KEYGUARD, null);
-        }
+        };
 
         public void drawToCanvas(Canvas canvas, Drawable drawable) {
             if (drawable != null) {
@@ -422,7 +422,7 @@ public class KeyguardViewManager {
                 canvas.drawColor(BACKGROUND_COLOR, PorterDuff.Mode.SRC);
 
             }
-        };
+        }
 
         public void setCustomBackground(Drawable d) {
 
