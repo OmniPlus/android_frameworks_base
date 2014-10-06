@@ -171,7 +171,7 @@ public class KeyguardViewManager {
 
             mKeyguardHost.setCustomBackground(bmp != null ?
                     new BitmapDrawable(mContext.getResources(), bmp) : null);
-            updateShowWallpaper(mKeyguardHost.shouldShowWallpaper());
+            // updateShowWallpaper(mKeyguardHost.shouldShowWallpaper());
 
         }
     };
@@ -282,7 +282,7 @@ public class KeyguardViewManager {
 
         maybeDisableImmersiveMode(disableImmersiveMode);
 
-        updateShowWallpaper(mKeyguardHost.shouldShowWallpaper());
+       // updateShowWallpaper(mKeyguardHost.shouldShowWallpaper());
 
 
         // Disable common aspects of the system/status/navigation bars that are not appropriate or
@@ -538,21 +538,27 @@ public class KeyguardViewManager {
                     return true;
                 }
             }
-            return super.dispatchKeyEvent(event);
+           // return super.dispatchKeyEvent(event);
         }
 
-        private void cacheUserImage() {
+      /*  private void cacheUserImage() {
             WallpaperManager wm = WallpaperManager.getInstance(mContext);
             Bitmap bitmap = wm.getKeyguardBitmap();
             if (bitmap != null) {
-                mUserBackground = new BitmapDrawable(mContext.getResources(), bitmap);
+               // mUserBackground = new BitmapDrawable(mContext.getResources(), bitmap);
             } else {
-                mUserBackground = null;
+               // mUserBackground = null;
             }
             setCustomBackground(null);
         
-}
-        public boolean shouldShowWallpaper(boolean hiding) {
+} */
+       
+
+
+
+/* 
+
+public boolean shouldShowWallpaper(boolean hiding) {
             if (hiding) {
                 if (mCustomBackground != null) {
                     return false;
@@ -569,6 +575,10 @@ public class KeyguardViewManager {
         public boolean shouldShowWallpaper() {
             return mUserBackground == null;
         }
+
+
+
+*/
 
     
 
@@ -600,11 +610,11 @@ public class KeyguardViewManager {
             lp.screenOrientation = enableScreenRotation ?
                     ActivityInfo.SCREEN_ORIENTATION_USER : ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
 
-            if (ActivityManager.isHighEndGfx()) {
+           /* if (ActivityManager.isHighEndGfx()) {
                 lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
                 lp.privateFlags |=
                         WindowManager.LayoutParams.PRIVATE_FLAG_FORCE_HARDWARE_ACCELERATED;
-            }
+            } */
             lp.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_SET_NEEDS_MENU_KEY;
             lp.inputFeatures |= WindowManager.LayoutParams.INPUT_FEATURE_DISABLE_USER_ACTIVITY;
             lp.setTitle("Keyguard");
