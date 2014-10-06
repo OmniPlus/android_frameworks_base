@@ -581,13 +581,13 @@ public boolean shouldShowWallpaper(boolean hiding) {
 */
 
     
-
+}
     SparseArray<Parcelable> mStateContainer = new SparseArray<Parcelable>();
     private void maybeCreateKeyguardLocked(boolean enableScreenRotation, boolean force,
             Bundle options) {
         if (mKeyguardHost != null) {
             mKeyguardHost.saveHierarchyState(mStateContainer);
-        }
+        
 
         if (mKeyguardHost == null) {
             if (DEBUG) Log.d(TAG, "keyguard host is null, creating it...");
