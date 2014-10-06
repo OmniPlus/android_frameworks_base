@@ -396,12 +396,12 @@ public class KeyguardViewManager {
                 setBackground(customLockscreen);
 
             setBackground(mBackgroundDrawable);
-            cacheUserImage();
+           // cacheUserImage();
 
             context.registerReceiver(new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    cacheUserImage();
+              //      cacheUserImage();
                 }
             }, new IntentFilter(Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED),
                     android.Manifest.permission.CONTROL_KEYGUARD, null);
@@ -624,7 +624,7 @@ public boolean shouldShowWallpaper(boolean hiding) {
             mKeyguardHost.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mKeyguardHost.cacheUserImage();
+                  //  mKeyguardHost.cacheUserImage();
                 }
             }, 100);
         }
@@ -904,7 +904,7 @@ public boolean shouldShowWallpaper(boolean hiding) {
                             // showing the wallpaper will cause the *regular* wallpaper
                             // to briefly flash. This is proper behavior only if no
                             // custom wallpaper is set.
-                            updateShowWallpaper(mKeyguardHost.shouldShowWallpaper(true));
+                           // updateShowWallpaper(mKeyguardHost.shouldShowWallpaper(true));
                             mKeyguardHost.removeView(lastView);
                             mViewMediatorCallback.keyguardGone();
                         }
