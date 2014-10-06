@@ -539,7 +539,7 @@ public class KeyguardViewManager {
                 }
             }
            // return super.dispatchKeyEvent(event);
-        }
+       // }
 
       /*  private void cacheUserImage() {
             WallpaperManager wm = WallpaperManager.getInstance(mContext);
