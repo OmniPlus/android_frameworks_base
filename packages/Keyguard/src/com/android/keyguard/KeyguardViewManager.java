@@ -953,3 +953,5 @@ public boolean shouldShowWallpaper(boolean hiding) {
         
     }
 }
+
+}
