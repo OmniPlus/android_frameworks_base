@@ -141,7 +141,7 @@ public class WallpaperCropActivity extends Activity {
         mSetWallpaperButton = findViewById(R.id.set_wallpaper_button);
 
         // Load image in background
-        final BitmapRegionTileSource.UriBitmapSource bitmapSource =
+     /*   final BitmapRegionTileSource.UriBitmapSource bitmapSource =
                 new BitmapRegionTileSource.UriBitmapSource(this, imageUri, 1024);
         mSetWallpaperButton.setVisibility(View.INVISIBLE);
         Runnable onLoad = new Runnable() {
@@ -157,9 +157,9 @@ public class WallpaperCropActivity extends Activity {
             }
         };
         setCropViewTileSource(bitmapSource, true, false, onLoad);
-    }
+    } */
 
-    public void setCropViewTileSource(
+   /* public void setCropViewTileSource(
             final BitmapRegionTileSource.BitmapSource bitmapSource, final boolean touchEnabled,
             final boolean moveToLeft, final Runnable postExecute) {
         final Context context = WallpaperCropActivity.this;
@@ -170,8 +170,8 @@ public class WallpaperCropActivity extends Activity {
                     bitmapSource.loadInBackground();
                 }
                 return null;
-            }
-            protected void onPostExecute(Void arg) {
+            } */
+         /*   protected void onPostExecute(Void arg) {
                 if (!isCancelled()) {
                     progressView.setVisibility(View.INVISIBLE);
                     if (bitmapSource.getLoadingState() == BitmapSource.State.LOADED) {
@@ -187,7 +187,7 @@ public class WallpaperCropActivity extends Activity {
                     postExecute.run();
                 }
             }
-        };
+        }; */
         // We don't want to show the spinner every time we load an image, because that would be
         // annoying; instead, only start showing the spinner if loading the image has taken
         // longer than 1 sec (ie 1000 ms)
@@ -642,7 +642,7 @@ public class WallpaperCropActivity extends Activity {
                         return false;
                     }
 
-                    Point bounds = getImageBounds();
+                  //  Point bounds = getImageBounds();
 
 
                     float[] rotatedBounds = new float[] { bounds.x, bounds.y };

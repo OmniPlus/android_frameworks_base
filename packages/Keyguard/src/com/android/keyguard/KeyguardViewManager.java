@@ -658,18 +658,18 @@ public boolean shouldShowWallpaper(boolean hiding) {
 
         mKeyguardHost.restoreHierarchyState(mStateContainer);
     }
-
+}
     private Bitmap rotateBmp(Bitmap bmp, int degrees) {
         Matrix m = new Matrix();
         m.postRotate(degrees);
         return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), m, true);
-    }
-
+    
+}
     private void inflateKeyguardView(Bundle options) {
         View v = mKeyguardHost.findViewById(R.id.keyguard_host_view);
         if (v != null) {
             mKeyguardHost.removeView(v);
-        }
+        
         final LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.keyguard_host_view, mKeyguardHost, true);
         mKeyguardView = (KeyguardHostView) view.findViewById(R.id.keyguard_host_view);
@@ -708,12 +708,12 @@ public boolean shouldShowWallpaper(boolean hiding) {
             }
         }
     }
-
+}
     public void updateUserActivityTimeout() {
         updateUserActivityTimeoutInWindowLayoutParams();
         mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
-    }
-
+    
+}
     private void updateUserActivityTimeoutInWindowLayoutParams() {
         // Use the user activity timeout requested by the keyguard view, if any.
         if (mKeyguardView != null) {
@@ -722,12 +722,12 @@ public boolean shouldShowWallpaper(boolean hiding) {
                 mWindowLayoutParams.userActivityTimeout = timeout;
                 return;
             }
-        }
+        
 
         // Otherwise, use the default timeout.
         mWindowLayoutParams.userActivityTimeout = KeyguardViewMediator.AWAKE_INTERVAL_DEFAULT_MS;
     }
-
+}
     private void maybeEnableScreenRotation(boolean enableScreenRotation) {
         // TODO: move this outside
         if (enableScreenRotation) {
@@ -738,8 +738,8 @@ public boolean shouldShowWallpaper(boolean hiding) {
             mWindowLayoutParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
         }
         mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
-    }
-
+    
+}
     private void maybeDisableImmersiveMode(boolean disableImmersiveMode) {
         if(disableImmersiveMode) {
             // Store old immersivemode
@@ -751,16 +751,16 @@ public boolean shouldShowWallpaper(boolean hiding) {
                     Settings.System.IMMERSIVE_MODE, DeviceUtils.IMMERSIVE_MODE_OFF, UserHandle.USER_CURRENT);
             }
         }
-    }
-
+    
+}
     private void maybeRestoreImmersiveMode() {
         if(mImmersiveModeStored != DeviceUtils.IMMERSIVE_MODE_OFF) {
             Settings.System.putIntForUser(mContext.getContentResolver(),
                 Settings.System.IMMERSIVE_MODE, mImmersiveModeStored, UserHandle.USER_CURRENT);
             mImmersiveModeStored = DeviceUtils.IMMERSIVE_MODE_OFF;
         }
-    }
-
+    
+}
     void updateShowWallpaper(boolean show) {
         if (show) {
             mWindowLayoutParams.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
@@ -768,8 +768,8 @@ public boolean shouldShowWallpaper(boolean hiding) {
             mWindowLayoutParams.flags &= ~WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
         }
         mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
-    }
-
+    
+}
     public void setNeedsInput(boolean needsInput) {
         mNeedsInput = needsInput;
         if (mWindowLayoutParams != null) {
@@ -788,8 +788,8 @@ public boolean shouldShowWallpaper(boolean hiding) {
                 Log.w(TAG,"Can't update input method on " + mKeyguardHost + " window not attached");
             }
         }
-    }
-
+    
+}
     /**
      * Reset the state of the view.
      */
@@ -798,8 +798,8 @@ public boolean shouldShowWallpaper(boolean hiding) {
         // User might have switched, check if we need to go back to keyguard
         // TODO: It's preferable to stay and show the correct lockscreen or unlock if none
         maybeCreateKeyguardLocked(shouldEnableScreenRotation(), true, options);
-    }
-
+    
+}
     public synchronized void onScreenTurnedOff() {
         if (DEBUG) Log.d(TAG, "onScreenTurnedOff()");
         mScreenOn = false;
@@ -809,8 +809,8 @@ public boolean shouldShowWallpaper(boolean hiding) {
         if (mLockscreenNotifications) {
             mNotificationViewManager.onScreenTurnedOff();
         }
-    }
-
+    
+}
     public synchronized void onScreenTurnedOn(final IKeyguardShowCallback callback) {
         if (DEBUG) Log.d(TAG, "onScreenTurnedOn()");
         mScreenOn = true;
@@ -860,14 +860,14 @@ public boolean shouldShowWallpaper(boolean hiding) {
         if (mLockscreenNotifications) {
             mNotificationViewManager.onScreenTurnedOn();
         }
-    }
-
+    
+}
     public synchronized void verifyUnlock() {
         if (DEBUG) Log.d(TAG, "verifyUnlock()");
         show(null);
         mKeyguardView.verifyUnlock();
-    }
-
+    
+}
     /**
      * Hides the keyguard view
      */
@@ -912,8 +912,8 @@ public boolean shouldShowWallpaper(boolean hiding) {
                 }, HIDE_KEYGUARD_DELAY);
             }
         }
-    }
-
+    
+}
     /**
      * Dismisses the keyguard by going to the next screen or making it gone.
      */
@@ -921,27 +921,27 @@ public boolean shouldShowWallpaper(boolean hiding) {
         if (mScreenOn) {
             mKeyguardView.dismiss();
         }
-    }
-
+    
+}
     /**
      * @return Whether the keyguard is showing
      */
     public synchronized boolean isShowing() {
         return (mKeyguardHost != null && mKeyguardHost.getVisibility() == View.VISIBLE);
-    }
-
+    
+}
     public void showAssistant() {
         if (mKeyguardView != null) {
             mKeyguardView.showAssistant();
-        }
-    }
-
+        
+    
+}
     public void dispatch(MotionEvent event) {
         if (mKeyguardView != null) {
             mKeyguardView.dispatch(event);
         }
-    }
-
+    
+}
     public void dispatchButtonClick(int buttonId) {
         mNotificationView.onButtonClick(buttonId);
     }
