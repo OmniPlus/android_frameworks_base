@@ -936,6 +936,7 @@ public boolean shouldShowWallpaper(boolean hiding) {
         
     
 }
+}
     public void dispatch(MotionEvent event) {
         if (mKeyguardView != null) {
             mKeyguardView.dispatch(event);
@@ -944,11 +945,11 @@ public boolean shouldShowWallpaper(boolean hiding) {
 }
     public void dispatchButtonClick(int buttonId) {
         mNotificationView.onButtonClick(buttonId);
-    }
-
+    
+}
     public void launchCamera() {
         if (mKeyguardView != null) {
             mKeyguardView.launchCamera();
-        }
+        
     }
 }

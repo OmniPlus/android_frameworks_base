@@ -191,7 +191,7 @@ public class WallpaperCropActivity extends Activity {
         // We don't want to show the spinner every time we load an image, because that would be
         // annoying; instead, only start showing the spinner if loading the image has taken
         // longer than 1 sec (ie 1000 ms)
-        progressView.postDelayed(new Runnable() {
+     /*   progressView.postDelayed(new Runnable() {
             public void run() {
                 if (loadBitmapTask.getStatus() != AsyncTask.Status.FINISHED) {
                     progressView.setVisibility(View.VISIBLE);
@@ -200,7 +200,7 @@ public class WallpaperCropActivity extends Activity {
         }, 1000);
         loadBitmapTask.execute();
 
-    }
+    } */
 
     public boolean enableRotation() {
         return getResources().getBoolean(R.bool.allow_rotation);
