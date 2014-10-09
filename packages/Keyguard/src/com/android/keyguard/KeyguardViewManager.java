@@ -581,7 +581,7 @@ public boolean shouldShowWallpaper(boolean hiding) {
 */
 
     
-}
+
     SparseArray<Parcelable> mStateContainer = new SparseArray<Parcelable>();
     private void maybeCreateKeyguardLocked(boolean enableScreenRotation, boolean force,
             Bundle options) {
